@@ -21,11 +21,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     implementation 'uk.co.electronstudio.sdl2gdx:sdl2gdx:1.0.4'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'me.friwi:jcefmaven:105.3.36'
     implementation 'org.slf4j:slf4j-api:2.0.0'
-    implementation 'org.slf4j:slf4j-simple:2.0.0'
 }
 
 test {
