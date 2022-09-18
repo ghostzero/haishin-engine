@@ -1,11 +1,10 @@
-apply plugin: 'java'
-apply plugin: 'maven-publish'
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
 
-group = 'com.github.ghostzero'
-version = '1.0'
-
-sourceCompatibility = 16
-targetCompatibility = 16
+group 'moe.haishin'
+version '1.0'
 
 repositories {
     maven { url 'https://jitpack.io' }
@@ -26,20 +25,14 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:2.0.0'
 }
 
-java {
-    withSourcesJar()
-    // withJavadocJar()
+test {
+    useJUnitPlatform()
 }
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        mavenJava(MavenPublication) {
             from components.java
         }
     }
-}
-
-wrapper {
-    gradleVersion = "7.3.3"
-    distributionType = Wrapper.DistributionType.ALL
 }
