@@ -9,15 +9,30 @@ import moe.haishin.engine.HaishinEngine;
 
 import java.io.IOException;
 
+/**
+ * Scenes allow us to split the Game into independent and reusable pieces,
+ * and think about each piece in isolation.
+ */
 public abstract class Scene implements ControllerListener {
+    /**
+     * Called after the scene has been mounted.
+     */
     public void mounted() throws IOException {
         // do nothing
     }
 
+    /**
+     * Called after the scene has been unmounted.
+     */
     public void unmounted() {
         // do nothing
     }
 
+    /**
+     * Called during every game render circle.
+     *
+     * @param c Canvas that needs to be rendered
+     */
     abstract public void render(HaishinCanvas c);
 
     @Override

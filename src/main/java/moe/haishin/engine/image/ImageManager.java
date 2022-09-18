@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,6 +15,7 @@ public class ImageManager {
     public Map<String, BufferedImage> images = new HashMap<>();
 
     @SneakyThrows
+
     public ImageManager register(String reference, String path) {
         // ensure that the path contains / at the beginning
         if (!path.startsWith("/")) {
