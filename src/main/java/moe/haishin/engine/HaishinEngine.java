@@ -109,7 +109,10 @@ public class HaishinEngine {
     }
 
     private Dimension getDimensionWithFrameBorder(Dimension expectedDimension) {
-        return new Dimension(expectedDimension.width + 16, expectedDimension.height + 38);
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            return new Dimension(expectedDimension.width + 16, expectedDimension.height + 38);
+        }
+        return new Dimension(expectedDimension.width, expectedDimension.height);
     }
 
     @SuppressWarnings("unused")
