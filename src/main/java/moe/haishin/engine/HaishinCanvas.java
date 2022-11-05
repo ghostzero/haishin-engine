@@ -38,6 +38,12 @@ public class HaishinCanvas {
         g.dispose();
     }
 
+    public void drawImage(int x, int y, int width, int height, String name) {
+        Graphics2D g = bufferedImage.createGraphics();
+        g.drawImage(game.getImageManager().get(name), x, y, width, height, null);
+        g.dispose();
+    }
+
     public Image paintComponent() {
         if (!game.isDebug()) {
             return bufferedImage;
@@ -45,10 +51,11 @@ public class HaishinCanvas {
 
         // draw debug information
         // string format float with two decimal places
-        drawString(1, 18, String.format("Music: %.2f", game.getMusicManager().getVolume()));
+        drawImage(0, 0, "bg-dialog");
+        drawString(-1, 18, String.format("Music: %.2f", game.getMusicManager().getVolume()));
         for (int i = 0; i < game.getThreads().size(); i++) {
             HaishinThread thread = game.getThreads().get(i);
-            drawString(1, 24 + (i * 6), thread.getName() + ": " + thread.getFps());
+            drawString(-1, 24 + (i * 6), thread.getName() + ": " + thread.getFps());
         }
 
         return bufferedImage;

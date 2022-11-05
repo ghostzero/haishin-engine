@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +29,7 @@ public class HaishinEngine {
     private final ImageManager imageManager;
     private final ApiService apiService;
     private final JFrame frame;
+    private final HaishinPanel panel;
     private boolean debug = false;
     private final SchedulerManager schedulerManager;
 
@@ -36,7 +39,7 @@ public class HaishinEngine {
         imageManager = new ImageManager();
         HaishinCanvas canvas = new HaishinCanvas(this, 128, 64);
 
-        JPanel panel = new HaishinPanel(canvas, 8f);  // 15 = 1920x1080, 10 = 1280x720
+        panel = new HaishinPanel(canvas, 8f);  // 15 = 1920x1080, 10 = 1280x720
 
         Box box = new Box(BoxLayout.Y_AXIS);
         box.setBackground(Color.BLACK);
@@ -57,12 +60,30 @@ public class HaishinEngine {
 
         frame.setVisible(true);
         frame.setResizable(false);
+        frame.setAlwaysOnTop(true);
 
         frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 // log the new size
                 System.out.println("New size: " + e.getComponent().getSize());
+            }
+        });
+
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                System.out.println("keyTyped");
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                System.out.println("keyPressed");
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                System.out.println("keyReleased");
             }
         });
 
@@ -143,6 +164,10 @@ public class HaishinEngine {
 
     public List<HaishinThread> getThreads() {
         return gameThreads;
+    }
+
+    public HaishinPanel getPanel() {
+        return panel;
     }
 
     public boolean isDebug() {

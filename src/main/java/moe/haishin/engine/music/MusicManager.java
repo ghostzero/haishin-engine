@@ -3,8 +3,6 @@ package moe.haishin.engine.music;
 import lombok.SneakyThrows;
 
 import javax.sound.sampled.*;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +45,13 @@ public class MusicManager {
             register(reference, String.format("sounds/%s.wav", reference));
         }
 
+        if (loop == Audio.LOOP_CONTINUOUSLY) {
+            Audio currentlyLooping = getLoopedAudio(reference);
+            if (currentlyLooping != null) {
+                return currentlyLooping;
+            }
+        }
+
         try {
             AudioInputStream stream;
             AudioFormat format;
@@ -59,7 +64,7 @@ public class MusicManager {
             clip = (Clip) AudioSystem.getLine(info);
             clip.open(stream);
 
-            Audio audio = new Audio(this, clip, loop);
+            Audio audio = new Audio(this, clip, reference, loop);
 
             if (loop == Audio.LOOP_CONTINUOUSLY) {
                 loops.add(audio);
@@ -71,6 +76,16 @@ public class MusicManager {
         } catch (Exception e) {
             e.printStackTrace();
             //whatevers
+        }
+
+        return null;
+    }
+
+    private Audio getLoopedAudio(String reference) {
+        for (Audio audio : loops) {
+            if (audio.getReference().equals(reference)) {
+                return audio;
+            }
         }
 
         return null;
@@ -92,6 +107,7 @@ public class MusicManager {
         for (Audio loop : loops) {
             loop.stop();
         }
+        this.loops.clear();
     }
 
     public float getVolume() {

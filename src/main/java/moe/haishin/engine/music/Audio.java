@@ -9,11 +9,13 @@ public class Audio {
     public static final int LOOP_DISABLE = 0;
     private final MusicManager musicManager;
     private final Clip clip;
+    private final String reference;
     private final int loop;
 
-    public Audio(MusicManager musicManager, Clip clip, int loop) {
+    public Audio(MusicManager musicManager, Clip clip, String reference, int loop) {
         this.musicManager = musicManager;
         this.clip = clip;
+        this.reference = reference;
         this.loop = loop;
     }
 
@@ -42,5 +44,9 @@ public class Audio {
         float hearingThreshold = volumeControl.getMinimum() + (volumeControl.getMaximum() - volumeControl.getMinimum()) * volume;
         float newVolume = Math.min(volumeControl.getMaximum(), Math.max(volumeControl.getMinimum(), hearingThreshold));
         volumeControl.setValue(newVolume);
+    }
+
+    public String getReference() {
+        return reference;
     }
 }
