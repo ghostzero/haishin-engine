@@ -1,6 +1,7 @@
 package moe.haishin.engine.image;
 
 import lombok.SneakyThrows;
+import moe.haishin.engine.Asset;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -8,7 +9,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Loads images from the resources folder into a map.
@@ -25,12 +25,7 @@ public class ImageManager {
 
     @SneakyThrows
     public ImageManager register(String reference, String path, Boolean includeFlipped) {
-        // ensure that the path contains / at the beginning
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-
-        BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path)));
+        BufferedImage bufferedImage = ImageIO.read(Asset.get(path));
         images.put(reference, bufferedImage);
 
         if (includeFlipped) {

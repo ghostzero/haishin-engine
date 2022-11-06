@@ -1,6 +1,10 @@
 package moe.haishin.engine.music;
 
 import lombok.SneakyThrows;
+import moe.haishin.engine.Asset;
+import moe.haishin.engine.HaishinEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sound.sampled.*;
 import java.net.URL;
@@ -14,6 +18,7 @@ public class MusicManager {
     protected final List<Audio> loops = new ArrayList<>();
     private float volume = 0.7f;
     private boolean keepLoops = false;
+    private static final Logger log = LoggerFactory.getLogger(MusicManager.class);
 
     public MusicManager() {
         // do nothing
@@ -21,13 +26,8 @@ public class MusicManager {
 
     @SneakyThrows
     public MusicManager register(String resource, String path) {
-        // ensure that the path contains / at the beginning
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-
-        System.out.println("Registered music: " + resource + " from " + path);
-        sounds.put(resource, getClass().getResource(path));
+        log.debug("Registered music: " + resource + " from " + path);
+        sounds.put(resource, Asset.get(path).toURI().toURL());
 
         return this;
     }

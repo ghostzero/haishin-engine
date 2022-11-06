@@ -22,7 +22,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     implementation 'uk.co.electronstudio.sdl2gdx:sdl2gdx:1.0.4'
-    implementation 'org.slf4j:slf4j-api:2.0.0'
+    implementation 'org.slf4j:slf4j-api:2.0.3'
 }
 
 test {

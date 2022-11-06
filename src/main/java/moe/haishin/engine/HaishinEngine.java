@@ -8,6 +8,8 @@ import moe.haishin.engine.input.ButtonCode;
 import moe.haishin.engine.music.MusicManager;
 import moe.haishin.engine.scene.Scene;
 import moe.haishin.engine.scheduler.SchedulerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 
 import javax.swing.*;
@@ -32,6 +34,7 @@ public class HaishinEngine {
     private final HaishinPanel panel;
     private boolean debug = false;
     private final SchedulerManager schedulerManager;
+    private static final Logger log = LoggerFactory.getLogger(HaishinEngine.class);
 
     private HaishinEngine(ApiService apiService, String title) throws Exception {
         Haishin.setEngine(this);
@@ -66,24 +69,24 @@ public class HaishinEngine {
             @Override
             public void componentResized(ComponentEvent e) {
                 // log the new size
-                System.out.println("New size: " + e.getComponent().getSize());
+                log.debug("New size: " + e.getComponent().getSize());
             }
         });
 
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                System.out.println("keyTyped");
+                log.debug("keyTyped");
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-                System.out.println("keyPressed");
+                log.debug("keyPressed");
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                System.out.println("keyReleased");
+                log.debug("keyReleased");
             }
         });
 
