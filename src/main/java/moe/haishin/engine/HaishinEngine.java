@@ -1,10 +1,8 @@
 package moe.haishin.engine;
 
-import com.badlogic.gdx.controllers.Controller;
 import moe.haishin.engine.api.ApiService;
 import moe.haishin.engine.image.ImageManager;
-import moe.haishin.engine.input.AbstractControllerListener;
-import moe.haishin.engine.input.ButtonCode;
+import moe.haishin.engine.input.*;
 import moe.haishin.engine.music.MusicManager;
 import moe.haishin.engine.scene.Scene;
 import moe.haishin.engine.scheduler.SchedulerManager;
@@ -16,13 +14,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class HaishinEngine {
+    private static final Logger log = LoggerFactory.getLogger(HaishinEngine.class);
     private static HaishinEngine instance;
     private final HaishinSceneManager sceneManager;
     private final List<HaishinThread> gameThreads = new ArrayList<>();
@@ -32,11 +30,12 @@ public class HaishinEngine {
     private final ApiService apiService;
     private final JFrame frame;
     private final HaishinPanel panel;
+    private final InputManager inputManager;
     private boolean debug = false;
     private final SchedulerManager schedulerManager;
-    private static final Logger log = LoggerFactory.getLogger(HaishinEngine.class);
 
-    private HaishinEngine(ApiService apiService, String title) throws Exception {
+    private HaishinEngine(ApiService apiService, File assetDirectory, String title) throws Exception {
+        Asset.setBaseDirectory(assetDirectory);
         Haishin.setEngine(this);
         this.apiService = apiService;
         imageManager = new ImageManager();
@@ -51,9 +50,14 @@ public class HaishinEngine {
         box.add(panel);
         box.add(Box.createVerticalGlue());
 
-        ImageIcon img = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icon.png")));
         frame = new JFrame(title);
-        frame.setIconImage(img.getImage());
+
+        // load icon from resources if exists
+        URL uri = getClass().getResource("/icon.png");
+        if (uri != null) {
+            frame.setIconImage(new ImageIcon(uri).getImage());
+        }
+
         frame.add(box);
         // get frameborder
         frame.setSize(getDimensionWithFrameBorder(panel.getPreferredSize()));
@@ -64,6 +68,7 @@ public class HaishinEngine {
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setAlwaysOnTop(true);
+        frame.setFocusTraversalKeysEnabled(false);
 
         frame.addComponentListener(new ComponentAdapter() {
             @Override
@@ -73,33 +78,16 @@ public class HaishinEngine {
             }
         });
 
-        frame.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                log.debug("keyTyped");
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                log.debug("keyPressed");
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                log.debug("keyReleased");
-            }
-        });
-
         musicManager = new MusicManager();
         sceneManager = new HaishinSceneManager(this);
         schedulerManager = new SchedulerManager(this);
 
-        //SDL.SDL_SetHint("SDL_XINPUT_ENABLED", "0");
-        controllerManager = new SDL2ControllerManager();
-
-        controllerManager.addListener(new AbstractControllerListener() {
+        // initialize inputs
+        inputManager = new InputManager();
+        inputManager.addInput(new KeyboardInput(inputManager, frame));
+        inputManager.addInputListeners(new AbstractInputListener() {
             @Override
-            public boolean buttonUp(Controller controller, int buttonCode) {
+            public void buttonUp(Input input, ButtonCode buttonCode) {
                 if (buttonCode == ButtonCode.SELECT) {
                     setDebug(!isDebug());
                 }
@@ -111,9 +99,14 @@ public class HaishinEngine {
                 if (isDebug() && buttonCode == ButtonCode.RIGHT) {
                     musicManager.setVolume(musicManager.getVolume() + 0.05f);
                 }
-                return false;
             }
         });
+
+        // register all inputs
+        //SDL.SDL_SetHint("SDL_XINPUT_ENABLED", "0");
+        controllerManager = new SDL2ControllerManager();
+        inputManager.addInput(new ControllerInput(inputManager, controllerManager));
+
 
         HaishinCanvasEngine canvasEngine = new HaishinCanvasEngine(sceneManager, canvas, panel);
         HaishinPhysicsEngine physicsEngine = new HaishinPhysicsEngine(this);
@@ -123,11 +116,11 @@ public class HaishinEngine {
     }
 
     @SuppressWarnings("unused")
-    public static HaishinEngine init(ApiService service, String title) throws Exception {
+    public static HaishinEngine init(ApiService service, File assetDirectory, String title) throws Exception {
         if (instance != null)
             throw new IllegalStateException("Already initialized");
 
-        instance = new HaishinEngine(service, title);
+        instance = new HaishinEngine(service, assetDirectory, title);
 
         return instance;
     }
@@ -161,6 +154,8 @@ public class HaishinEngine {
         return imageManager;
     }
 
+    @Deprecated
+    @SuppressWarnings("DeprecatedIsStillUsed")
     public SDL2ControllerManager getControllerManager() {
         return controllerManager;
     }
@@ -187,6 +182,10 @@ public class HaishinEngine {
 
     public SchedulerManager getScheduler() {
         return schedulerManager;
+    }
+
+    public InputManager getInputManager() {
+        return inputManager;
     }
 
     public boolean isFocus() {

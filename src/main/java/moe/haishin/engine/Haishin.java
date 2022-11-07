@@ -3,6 +3,7 @@ package moe.haishin.engine;
 import moe.haishin.engine.api.ApiService;
 import moe.haishin.engine.font.FontLoader;
 import moe.haishin.engine.image.ImageManager;
+import moe.haishin.engine.input.InputManager;
 import moe.haishin.engine.music.MusicManager;
 import moe.haishin.engine.scheduler.SchedulerManager;
 
@@ -32,6 +33,10 @@ public class Haishin {
 
     public static MusicManager getMusicManager() {
         return engine.getMusicManager();
+    }
+
+    public static InputManager getInputManager() {
+        return engine.getInputManager();
     }
 
     public static ApiService getApiService() {

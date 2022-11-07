@@ -1,16 +1,56 @@
 package moe.haishin.engine.input;
 
-public class ButtonCode {
-    public static final int A = 0;
-    public static final int B = 1;
-    public static final int X = 2;
-    public static final int Y = 3;
-    public static final int SELECT = 4;
-    public static final int START = 6;
-    public static final int L1 = 9;
-    public static final int R1 = 10;
-    public static final int UP = 11;
-    public static final int DOWN = 12;
-    public static final int LEFT = 13;
-    public static final int RIGHT = 14;
+import java.awt.event.KeyEvent;
+
+public enum ButtonCode {
+    A(0, KeyEvent.VK_A),
+    B(1, KeyEvent.VK_B),
+    X(2, KeyEvent.VK_X),
+    Y(3, KeyEvent.VK_Y),
+    SELECT(4, KeyEvent.VK_TAB),
+    START(6, KeyEvent.VK_SHIFT),
+    L1(9, null),
+    R1(10, null),
+    UP(11, KeyEvent.VK_UP),
+    DOWN(12, KeyEvent.VK_DOWN),
+    LEFT(13, KeyEvent.VK_LEFT),
+    RIGHT(14, KeyEvent.VK_RIGHT);
+
+    private final Integer controllerButtonCode;
+    private final Integer keyCode;
+
+    ButtonCode(Integer controllerButtonCode, Integer keyCode) {
+        this.controllerButtonCode = controllerButtonCode;
+        this.keyCode = keyCode;
+    }
+
+    public Integer getControllerButtonCode() {
+        return controllerButtonCode;
+    }
+
+    public Integer getKeyCode() {
+        return keyCode;
+    }
+
+    public static ButtonCode mapControllerCode(int controllerButtonCode) {
+        for (ButtonCode buttonCode : ButtonCode.values()) {
+            if (buttonCode.getControllerButtonCode() != null
+                    && buttonCode.getControllerButtonCode() == controllerButtonCode) {
+                return buttonCode;
+            }
+        }
+
+        return null;
+    }
+
+    public static ButtonCode mapKeyEvent(KeyEvent e) {
+        for (ButtonCode buttonCode : ButtonCode.values()) {
+            if (buttonCode.getKeyCode() != null
+                    && buttonCode.getKeyCode() == e.getKeyCode()) {
+                return buttonCode;
+            }
+        }
+
+        return null;
+    }
 }

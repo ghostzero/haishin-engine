@@ -69,4 +69,8 @@ public class SchedulerManager {
             }
         }
     }
+
+    public final long getCurrentTick() {
+        return currentTick;
+    }
 }

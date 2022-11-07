@@ -95,4 +95,11 @@ public class HaishinCanvas {
 
         g.dispose();
     }
+
+    public void clear() {
+        Graphics2D g = bufferedImage.createGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, width, height);
+        g.dispose();
+    }
 }
