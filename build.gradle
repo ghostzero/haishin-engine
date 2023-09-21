@@ -9,7 +9,6 @@ version '1.0'
 repositories {
     maven { url 'https://jitpack.io' }
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
@@ -21,7 +20,7 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-    implementation 'uk.co.electronstudio.sdl2gdx:sdl2gdx:1.0.4'
+    implementation 'com.github.ghostzero:sdl2gdx:master-SNAPSHOT'
     implementation 'org.slf4j:slf4j-api:2.0.3'
 }
 

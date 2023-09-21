@@ -1,4 +1,17 @@
-Local development:
+## About
+
+The Haishin Engine is a self-developed game engine for Java based games. It's known for its unique design for
+retro games rendered in a 128x64 canvas. The engine is modular and has several features such as music, scene, scheduler
+and input management APIs. With a component like scene management, where each scene has its own lifecycle.
+
+## Java SDK Installation
+
+```
+sudo apt update && sudo apt upgrade -y
+sudo apt-get install openjdk-17-jdk
+```
+
+## Local Development
 
 ```
 ./gradlew publishToMavenLocal
@@ -26,6 +39,7 @@ public class App extends Scene {
             public void buttonUp(Input input, ButtonCode buttonCode) {
                 System.out.println("Button Up pressed " + buttonCode.name());
             }
+
             @Override
             public void buttonDown(Input input, ButtonCode buttonCode) {
                 System.out.println("Button Down pressed " + buttonCode.name());
