@@ -20,14 +20,15 @@ public class HaishinSceneManager {
         }
         log.debug("Requested scene change to " + nextScene.getClass().getSimpleName());
         if (currentScene != null) {
-            game.getControllerManager().removeListener(currentScene);
+            game.getInputManager().removeInputListeners(currentScene);
             currentScene.unmounted();
             game.getMusicManager().stopAllLoops();
         }
         currentScene = nextScene;
         nextScene = null;
         currentScene.mounted();
-        game.getControllerManager().addListenerAndRunForConnectedControllers(currentScene);
+        // fixme new input manager does not have this
+        // game.getControllerManager().addListenerAndRunForConnectedControllers(currentScene);
     }
 
     public void requestNextScene(Scene nextScene) {
