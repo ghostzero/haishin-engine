@@ -27,8 +27,7 @@ public class HaishinSceneManager {
         currentScene = nextScene;
         nextScene = null;
         currentScene.mounted();
-        // fixme new input manager does not have this
-        // game.getControllerManager().addListenerAndRunForConnectedControllers(currentScene);
+        game.getInputManager().addInputListeners(currentScene);
     }
 
     public void requestNextScene(Scene nextScene) {
